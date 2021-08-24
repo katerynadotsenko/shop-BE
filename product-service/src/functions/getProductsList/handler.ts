@@ -7,5 +7,5 @@ import * as products from '../../../products.json';
 
 
 export const getProductsList: APIGatewayProxyHandler = async (event) => {
-  return formatJSONResponse({ message: products.default });
+  return await formatJSONResponse({ body: products.default });
 }
