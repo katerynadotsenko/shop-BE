@@ -15,13 +15,13 @@ export const formatJSONResponse = (response: Record<string, unknown>) => {
   }
 }
 
-export const formatJSONResponse404 = (response: Record<string, unknown>) => {
+export const formatJSONResponseMessage = (response: Record<string, unknown>) => {
   return {
-    statusCode: 404,
+    statusCode: Number(response.statusCode),
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(response.message)
+    body: JSON.stringify({ message: response.message })
   }
 }

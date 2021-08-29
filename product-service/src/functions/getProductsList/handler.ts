@@ -1,11 +1,19 @@
 import 'source-map-support/register';
 
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { formatJSONResponse } from '@libs/apiGateway';
+import { formatJSONResponse, formatJSONResponseMessage } from '@libs/apiGateway';
 
 import * as products from '../../../products.json';
 
 
 export const getProductsList: APIGatewayProxyHandler = async (event) => {
-  return await formatJSONResponse({ body: products.default });
+  console.log('GET PRODUCTS LIST: ', event);
+
+  try {
+    return await formatJSONResponse({ body: products.default });
+  } catch (error) {
+    console.log('ERROR: ', error)
+
+    return await formatJSONResponseMessage({ message: 'Server Error', statusCode: 500 });
+  }
 }
