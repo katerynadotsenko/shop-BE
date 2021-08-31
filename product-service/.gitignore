@@ -6,3 +6,6 @@
 
 # Webpack directories
 .webpack
+
+# Test coverege info
+/coverage
