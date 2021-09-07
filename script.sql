@@ -12,7 +12,6 @@ create table stocks (
 	count integer
 );
 
-
 with product as (
 	insert into products (title, description, price) values
 	('Product 1 DB', 'Short Product Description 1', 20.5)

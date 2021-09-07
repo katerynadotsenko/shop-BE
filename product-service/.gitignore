@@ -9,3 +9,6 @@
 
 # Test coverege info
 /coverage
+
+# enviroment variables
+.env

@@ -5,7 +5,8 @@
   "main": "serverless.ts",
   "scripts": {
     "test": "jest --config=jest.config.ts",
-    "compile": "tsc"
+    "compile": "tsc",
+    "deploy": "serverless deploy"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -13,7 +14,9 @@
   "dependencies": {
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
-    "source-map-support": "^0.5.19"
+    "pg": "^8.7.1",
+    "source-map-support": "^0.5.19",
+    "uuid-v4-validator": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -22,11 +25,13 @@
     "@serverless/typescript": "^2.23.0",
     "@types/aws-lambda": "^8.10.71",
     "@types/jest": "^27.0.1",
+    "@types/jquery": "^3.5.6",
     "@types/node": "^14.14.25",
     "babel-jest": "^27.1.0",
     "jest": "^27.1.0",
     "json-schema-to-ts": "^1.5.0",
     "serverless": "^2.23.0",
+    "serverless-dotenv-plugin": "^3.9.0",
     "serverless-webpack": "^5.3.5",
     "ts-loader": "^8.0.15",
     "ts-node": "^9.1.1",
