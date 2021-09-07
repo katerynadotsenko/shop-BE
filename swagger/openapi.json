@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  version: 1.0.1-oas3
+  title: Swagger Store
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  contact:
+    name: Github
+    url: https://github.com/katerynadotsenko
+  description: Discord - Kateryna (@katerynadotsenko)
+tags:
+  - name: product
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+paths:
+  /products:
+    get:
+      tags:
+        - product
+      summary: Returns all products
+      description: Returns all products
+      operationId: getProducts
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Products'
+        '500':
+          description: Server Error
+      security:
+        - api_key: []
+  /products/{productId}:
+    get:
+      tags:
+        - product
+      summary: Find product by ID
+      description: Returns a single product
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+        '500':
+          description: Server Error
+      security:
+        - api_key: []
+servers:
+  - url: https://se42kzkh04.execute-api.eu-west-1.amazonaws.com/dev
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        count:
+          type: number
+          example: 6
+        description:
+          type: string
+          example: Short Product Description3
+        id:
+          type: string
+          example: 7567ec4b-b10c-48c5-9345-fc73c48a80a0
+        price:
+          type: number
+          example: 10
+        title:
+          type: string
+          example: ProductNew
+    Products:
+      type: array
+      items:
+        type: object
+        properties:
+          count:
+            type: number
+          description:
+            type: string
+          id:
+            type: string
+          price:
+            type: number
+          title:
+            type: string
+      example:
+        - count: 4
+          description: Short Product Description1
+          id: 7567ec4b-b10c-48c5-9345-fc73c48a80aa
+          price: 2.4
+          title: ProductOne,
+        - count: 6
+          description: Short Product Description3
+          id: 7567ec4b-b10c-48c5-9345-fc73c48a80a0
+          price: 10
+          title: ProductNew

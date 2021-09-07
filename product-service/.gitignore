@@ -1,0 +1,11 @@
+# dependencies
+/node_modules
+
+# Serverless directories
+.serverless
+
+# Webpack directories
+.webpack
+
+# Test coverege info
+/coverage
