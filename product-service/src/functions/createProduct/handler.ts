@@ -29,6 +29,16 @@ export const createProduct: APIGatewayProxyHandler = async (event) => {
     await client.query(`BEGIN`);
     await client.query(`SAVEPOINT SP1`);
 
+    const hasUnsupportedParams = Object.keys(event.queryStringParameters)
+      .find(param => param !== 'title' && param !== 'description' && param !== 'price' && param !== 'count');
+
+    if (!title || hasUnsupportedParams) {
+      const error = `Product data is invalid. ${!title ? 'Title is required.' : ''} ${hasUnsupportedParams ? 'There are unsupported params.' : ''}`;
+
+      console.log(`ERROR: ${error}`);
+      return formatJSONResponseMessage({ message: error, statusCode: 400 });
+    }
+
     const insertProductQuery = {
       text: 'insert into products (title, description, price) values ($1, $2, $3) returning id',
       values: [title, description || '', price || 0]
