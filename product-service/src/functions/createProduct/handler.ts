@@ -23,13 +23,13 @@ export const createProduct: APIGatewayProxyHandler = async (event) => {
   const client = new Client(dbOptions);
 
   try {
-    const { title, description, price, count } = event.queryStringParameters;
+    const { title, description, price, count } = JSON.parse(event.body);
 
     await client.connect();
     await client.query(`BEGIN`);
     await client.query(`SAVEPOINT SP1`);
 
-    const hasUnsupportedParams = Object.keys(event.queryStringParameters)
+    const hasUnsupportedParams = Object.keys(JSON.parse(event.body))
       .find(param => param !== 'title' && param !== 'description' && param !== 'price' && param !== 'count');
 
     if (!title || hasUnsupportedParams) {
