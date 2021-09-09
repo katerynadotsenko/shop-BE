@@ -2,6 +2,8 @@ import 'source-map-support/register';
 
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { formatJSONResponse, formatJSONResponseMessage } from '@libs/apiGateway';
+import { middyfy } from '@libs/lambda';
+
 import { Client } from 'pg';
 
 const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
@@ -18,7 +20,7 @@ const dbOptions = {
   connectionTimeoutMillis: 5000
 }
 
-export const getProductsList: APIGatewayProxyHandler = async (event) => {
+const getProductsList: APIGatewayProxyHandler = async (event) => {
   console.log('GET PRODUCTS LIST: ', event);
   const client = new Client(dbOptions);
 
@@ -35,3 +37,5 @@ export const getProductsList: APIGatewayProxyHandler = async (event) => {
     await client.end();
   }
 }
+
+export const main = middyfy(getProductsList);

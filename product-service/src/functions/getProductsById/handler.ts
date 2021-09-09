@@ -2,6 +2,8 @@ import 'source-map-support/register';
 
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { formatJSONResponse, formatJSONResponseMessage } from '@libs/apiGateway';
+import { middyfy } from '@libs/lambda';
+
 import { Client } from 'pg';
 import { UUIDv4 } from 'uuid-v4-validator'
 
@@ -19,8 +21,7 @@ const dbOptions = {
   connectionTimeoutMillis: 5000
 }
 
-
-export const getProductsById: APIGatewayProxyHandler = async (event) => {
+const getProductsById: APIGatewayProxyHandler = async (event) => {
   console.log('GET PRODUCT BY ID: ', event);
   const client = new Client(dbOptions);
 
@@ -53,3 +54,5 @@ export const getProductsById: APIGatewayProxyHandler = async (event) => {
     await client.end();
   }
 }
+
+export const main = middyfy(getProductsById);

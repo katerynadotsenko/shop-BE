@@ -1,7 +1,9 @@
 import 'source-map-support/register';
 
-import { APIGatewayProxyHandler } from 'aws-lambda';
-import { formatJSONResponse, formatJSONResponseMessage } from '@libs/apiGateway';
+import { formatJSONResponse, formatJSONResponseMessage, ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
+import { middyfy } from '@libs/lambda';
+
+import schema from './schema';
 import { Client } from 'pg';
 
 const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
@@ -18,26 +20,16 @@ const dbOptions = {
   connectionTimeoutMillis: 5000
 }
 
-export const createProduct: APIGatewayProxyHandler = async (event) => {
+const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   console.log('CREATE PRODUCT: ', event);
   const client = new Client(dbOptions);
 
   try {
-    const { title, description, price, count } = JSON.parse(event.body);
+    const { title, description, price, count } = event.body;
 
     await client.connect();
     await client.query(`BEGIN`);
     await client.query(`SAVEPOINT SP1`);
-
-    const hasUnsupportedParams = Object.keys(JSON.parse(event.body))
-      .find(param => param !== 'title' && param !== 'description' && param !== 'price' && param !== 'count');
-
-    if (!title || hasUnsupportedParams) {
-      const error = `Product data is invalid. ${!title ? 'Title is required.' : ''} ${hasUnsupportedParams ? 'There are unsupported params.' : ''}`;
-
-      console.log(`ERROR: ${error}`);
-      return formatJSONResponseMessage({ message: error, statusCode: 400 });
-    }
 
     const insertProductQuery = {
       text: 'insert into products (title, description, price) values ($1, $2, $3) returning id',
@@ -63,3 +55,5 @@ export const createProduct: APIGatewayProxyHandler = async (event) => {
     await client.end();
   }
 }
+
+export const main = middyfy(createProduct);
